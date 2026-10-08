@@ -1,0 +1,44 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  background: #f0f2f5;
+  color: #1f2328;
+}
+
+/* ── Print / PDF styles ──────────────────────────────────────────────────── */
+@media print {
+  /* Hide interactive chrome */
+  .no-print,
+  button,
+  select,
+  input[type="text"],
+  input[type="checkbox"] { display: none !important; }
+
+  /* Reset background to white */
+  body, .print-root { background: #fff !important; color: #000 !important; }
+
+  /* Remove card shadows / borders that look bad on paper */
+  div[style*="border-radius"] { border-radius: 0 !important; box-shadow: none !important; }
+
+  /* Force page breaks between major cards */
+  .page-break-before { page-break-before: always; }
+
+  /* Scale charts down so they fit on letter/A4 */
+  .recharts-responsive-container { break-inside: avoid; }
+
+  /* Expand full width — remove the 1100px max-width constraint */
+  .print-root > div { max-width: 100% !important; }
+
+  /* Tables: keep borders visible */
+  table { border-collapse: collapse !important; }
+  th, td { border: 1px solid #ccc !important; padding: 4px 6px !important; font-size: 10px !important; }
+
+  /* Print header */
+  .print-header { display: block !important; }
+}
+
+/* Hide print header in screen view */
+.print-header { display: none; }
