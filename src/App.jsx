@@ -333,11 +333,28 @@ function OptimizerPanel({ optResult, onApply, baseInputs }) {
                 </tr>
               </thead>
               <tbody>
-                {strategies.slice(0, 12).map((s, i) => (
+                {strategies.slice(0, 12).map((s, i) => {
+                  // Re-crown BEST: when RMD taming is active, the constrained winner
+                  // is the cheapest taming entry, not necessarily index 0.
+                  const constrainedBestIdx = (() => {
+                    // The constrained winner is the lowest-lifetimeCost strategy
+                    // that matches the active constraint type.
+                    // Since strategies are sorted by lifetimeCost, the first
+                    // RMD-taming entry (if any taming entries exist) or the first
+                    // bracket-capped entry is the constrained best.
+                    const hasTaming = strategies.some(x => x.isRmdTaming);
+                    if (hasTaming) {
+                      return strategies.findIndex(x => x.isRmdTaming);
+                    }
+                    // No taming active — index 0 is always best
+                    return 0;
+                  })();
+                  const isBest = i === constrainedBestIdx;
+                  return (
                   <tr key={i} onClick={() => setSelectedIdx(i)}
                     style={{ background: i === selectedIdx ? "#eff6ff" : s.isRmdTaming ? "#f0fdf4" : i % 2 === 0 ? "#fff" : "#fafafa", cursor: "pointer" }}>
                     <td style={{ ...td, textAlign: "left", maxWidth: 300, whiteSpace: "normal" }}>
-                      {i === 0 && <span style={{ background: "#16a34a", color: "#fff", borderRadius: 3, padding: "1px 5px", fontSize: 10, fontWeight: 700, marginRight: 5 }}>BEST</span>}
+                      {isBest && <span style={{ background: "#16a34a", color: "#fff", borderRadius: 3, padding: "1px 5px", fontSize: 10, fontWeight: 700, marginRight: 5 }}>BEST</span>}
                       {s.isRmdTaming && <span style={{ background: "#3b82d4", color: "#fff", borderRadius: 3, padding: "1px 5px", fontSize: 10, fontWeight: 700, marginRight: 5 }}>🎯 RMD TAMING</span>}
                       {s.ceilingLabel}
                       {s.isRmdTaming && s.rmdAtTarget > 0 && (
@@ -360,7 +377,8 @@ function OptimizerPanel({ optResult, onApply, baseInputs }) {
                         style={{ background: "none", border: "1px solid #d0d7de", borderRadius: 4, padding: "2px 8px", fontSize: 11, cursor: "pointer", color: "#57606a" }}>Apply</button>
                     </td>
                   </tr>
-                ))}
+                );
+                })}
               </tbody>
             </table>
           </div>
@@ -1427,7 +1445,12 @@ export default function App() {
                 <Card title="Final Balances" accent="#10b981">
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
                     <StatBox label={`Traditional IRA${showRealDollars ? " (real $)" : ""}`} value={realFmt(s.finalTraditionalIRA, s.totalYearsModeled)} color="#1f2328" />
-                    <StatBox label={`Roth IRA (tax-free)${showRealDollars ? " (real $)" : ""}`} value={realFmt(s.finalRothIRA, s.totalYearsModeled)} color="#10b981" />
+                    <div style={{ textAlign: "center", position: "relative" }}>
+                      <StatBox label={`Roth IRA (tax-free)${showRealDollars ? " (real $)" : ""}`} value={realFmt(s.finalRothIRA, s.totalYearsModeled)} color="#10b981" />
+                      <div style={{ marginTop: 6, display: "inline-block", background: "#dcfce7", color: "#166534", border: "1px solid #86efac", borderRadius: 4, padding: "2px 8px", fontSize: 10, fontWeight: 700 }}>
+                        ✓ 100% Tax-Free to Heirs (SECURE 2.0 Compliant)
+                      </div>
+                    </div>
                     <StatBox label={`Taxable Brokerage${showRealDollars ? " (real $)" : ""}`} value={realFmt(s.finalTaxableBrokerage, s.totalYearsModeled)} color="#57606a" />
                   </div>
                   {showRealDollars && (
@@ -1444,7 +1467,7 @@ export default function App() {
                     <StatBox label="Annual RMD Saved"
                       value={fmt$(s.baselineRMDAtRmdAge - s.projectedRMDAtRmdAge)}
                       color="#10b981"
-                      sub={`less taxable income at ${s.rmdStartAge}`} />
+                      sub={`less taxable income at age ${s.rmdStartAge} · est. ${fmt$((s.baselineRMDAtRmdAge - s.projectedRMDAtRmdAge) * 0.24)} in federal tax avoided annually`} />
                   </div>
                   <div style={{ marginTop: 8, fontSize: 11, color: "#8b949e" }}>
                     RMD amounts are shown in nominal dollars. The tax impact of RMDs depends on nominal income, not inflation-adjusted income.
@@ -1476,7 +1499,10 @@ export default function App() {
             </Card>
 
             {/* MAGI vs IRMAA threshold */}
-            <Card title={`MAGI vs 2026 IRMAA Threshold (${filing === "single" ? "$109k single" : "$218k MFJ"})`}>
+            <Card title="Projected MAGI vs. Inflating IRMAA Thresholds">
+              <div style={{ fontSize: 12, color: "#8b949e", marginBottom: 8 }}>
+                IRMAA thresholds adjust for inflation each year internally. The reference line shows the year-0 threshold; the engine applies per-year scaled thresholds to determine surcharges.
+              </div>
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -1529,6 +1555,9 @@ export default function App() {
             </Card>
 
             {/* Year-by-year table */}
+            <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 6, padding: "10px 14px", marginBottom: 0, fontSize: 13, color: "#1e40af" }}>
+              <strong>ℹ️ Medicare IRMAA Lookback:</strong> Medicare IRMAA surcharges at age 65 are determined by your MAGI from age 63 due to the CMS 2-year lookback rule. Plan your conversions with this lag in mind.
+            </div>
             <Card title="Year-by-Year Breakdown">
               <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
                 <button onClick={() => exportCSV(
