@@ -2,8 +2,8 @@
 
 **Team:** TaxStack Solutions  
 **Track:** Theme 2 — Experienced Developers: Modernize What Matters  
-**Demo Video:** *(insert YouTube link)*  
-**Live App:** *https://roth-conversion-eta.vercel.app/*
+**Demo Video:** * https://youtu.be/uR0A0lmI0UQ *  
+**Live App:** * https://roth-conversion-eta.vercel.app/ *
 
 ---
 
