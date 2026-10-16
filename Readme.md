@@ -4,6 +4,7 @@
 **Track:** Theme 2 — Experienced Developers: Modernize What Matters  
 **Demo Video:** * https://youtu.be/uR0A0lmI0UQ *  
 **Live App:** * https://roth-conversion-eta.vercel.app/ *
+
 **Bob Tasks:** * https://github.com/ccjung/roth-conversion/blob/main/TaxStackSolutions-BobTasks-bob-task-7ce856920dad08f814f11eb31a6337b3-2026-10-16.md *
 
 ---
@@ -78,14 +79,14 @@ All math lives in a single pure-JS module with no external calculation dependenc
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18, Vite 5 |
-| Charts | Recharts 3 |
-| Styling | Inline CSS (no Tailwind dependency) |
-| Engine | Vanilla JavaScript ES modules |
-| AI Partner | IBM Bob |
-| Runtime | Node.js 18+ |
+- **AI Pair-Programming & Core Engine Generation:** IBM Bob (100% of code generated and iterated via targeted prompt engineering)
+- **Frontend Framework:** React 18
+- **Build Tool & Bundler:** Vite
+- **Styling & UI Components:** Tailwind CSS, Lucide React (Icons)
+- **Data Visualization & Charting:** Recharts
+- **Language & Runtime:** JavaScript (ES6+ / Vanilla JS client-side calculation engine)
+- **Version Control & Repository:** Git, GitHub
+- **Hosting, CI/CD & Deployment:** Vercel
 
 ---
 
