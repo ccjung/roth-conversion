@@ -1,8 +1,11 @@
 # Roth Conversion \& IRMAA Optimizer
 
 **Team:** TaxStack Solutions  
-**Track:** Theme 1 - Explore, Fix, and Build 
+**Track:** Theme 1 - Explore, Fix, and Build
+
+
 **Demo Video:** \* https://youtu.be/bauZnI-lyWk \*  
+
 **Live App:** \* https://roth-conversion-eta.vercel.app/ \*
 
 **Bob Tasks:** \* https://github.com/ccjung/roth-conversion/blob/main/TaxStackSolutions-BobTasks-bob-task-7ce856920dad08f814f11eb31a6337b3-2026-10-16.md \*
@@ -72,7 +75,7 @@ All math lives in a single pure-JS module with no external calculation dependenc
 |`calcIRMAA(magi, status, age, lookbackMagi, ...)`|Medicare Part B/D surcharge with 2-year lookback|
 |`calcRMD(balance, age, birthYear)`|RMD using IRS Uniform Lifetime Table + SECURE 2.0 ages|
 |`calcSSTax(ssBenefit, otherAGI, status)`|Provisional income formula (up to 85% inclusion)|
-|`STATE\\\_TAX\\\_RATES` / `STATE\\\_TAX\\\_NOTES`|51-state conversion-specific rates \& exemption notes|
+|`STATE\\\\\\\_TAX\\\\\\\_RATES` / `STATE\\\\\\\_TAX\\\\\\\_NOTES`|51-state conversion-specific rates \& exemption notes|
 
 ### Tax Law Accuracy
 
